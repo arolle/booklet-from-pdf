@@ -15,16 +15,17 @@ OUTPUT="${1%.*}.booklet.pdf"
 PAGES="$("${QPDF}" --show-npages "${1}" | tr -d '\n ')"
 m="$((PAGES % 4))"
 [ ! "$m" -eq 0 ] && (echo "number of pages '$PAGES' has to be a multiple of 4"; exit 1)
-
-PAGEORDER="$("${PROG_DIR}/page-order.sh" "${PAGES}" "$2")"
 echo "pages '$PAGES'"
 
-if [ "$2--" == --rotate-back-page-- ]; then
-    echo "Rotating back pages..."
-    ROTATE="--rotate=+180:3,4$(for c in $(seq 5 4 "$PAGES"); do echo -n ",$((c+2)),$((c+3))"; done)"
+if [ "$#" -gt 1 ] && [ "$2" == "--rotate-back-pages" ]; then
+  echo "Rotating back pages..."
+  PAGEORDER="$("${PROG_DIR}/page-order.sh" "${PAGES}" "$2")"
+  ROTATE="--rotate=+180:$(for c in $(seq 1 4 "$PAGES"); do echo -n ",$((c+2)),$((c+3))"; done)"
 else
-    ROTATE=''
+  PAGEORDER="$("${PROG_DIR}/page-order.sh" "${PAGES}")"
+  ROTATE=''
 fi
+
 "${QPDF}" "$ROTATE" --empty --pages "${1}" "$PAGEORDER" -- "${OUTPUT}"
 echo "written to '$OUTPUT'"
 
