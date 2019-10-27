@@ -21,7 +21,7 @@ echo "pages '$PAGES'"
 
 if [ "$2--" == --rotate-back-page-- ]; then
     echo "Rotating back pages..."
-    ROTATE=--rotate=+180:3,4$(c=5; while [ $c -lt $PAGES ]; do echo -n   ,$(($c+2)),$(($c+3)); c=$(($c+4)); done)
+    ROTATE="--rotate=+180:3,4$(for c in $(seq 5 4 "$PAGES"); do echo -n ",$((c+2)),$((c+3))"; done)"
 else
     ROTATE=''
 fi
