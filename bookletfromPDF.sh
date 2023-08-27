@@ -26,6 +26,6 @@ else
   ROTATE=''
 fi
 
-"${QPDF}" "$ROTATE" --empty --pages "${1}" "$PAGEORDER" -- "${OUTPUT}"
+"${QPDF}" "$ROTATE" --pages "${1}" "$PAGEORDER" -- "${OUTPUT}"
 echo "written to '$OUTPUT'"
 
